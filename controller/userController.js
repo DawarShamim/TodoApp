@@ -3,22 +3,26 @@ const bcrypt =require('bcryptjs');
 
 exports.registerUser = async (req, res) => {
     try {
-      const name =req.body?.name;
-      const email = req.body?.email;
-      const password  = req.body?.password;
-      // Check if the username or email already exists in the database
-      const existingUser = await User.findOne({ $or: { email } });
+      const { email, username, password, firstName, lastName, dateOfBirth } = req.body;
+  
+      // Check if the email or username already exists in the database
+      const existingUser = await User.findOne({ $or: [{ email }, { username }] });
       if (existingUser) {
-        return res.status(400).json({ success: false, message: 'Username or email already exists' });
+        return res.status(400).json({ success: false, message: 'Email or username already exists' });
       }
+  
       // Hash the password
       const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);    
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+  
       // Create a new user
       const newUser = new User({
-        name,
         email,
+        username,
         password: hashedPassword,
+        firstName,
+        lastName,
+        dateOfBirth,
       });
   
       // Save the user to the database
@@ -29,6 +33,7 @@ exports.registerUser = async (req, res) => {
       res.status(500).json({ success: false, message: 'Registration failed', error: err.message });
     }
   };
+  
 
 
 exports.updateUserPassword = async (req, res) => {
@@ -61,12 +66,3 @@ exports.updateUserPassword = async (req, res) => {
     };
 
 
-exports.getallUser= async (req,res)=>{
-    try{
-        const users= await User.find();
-        
-      res.status(201).json({ success: true, message: [],users });
-    } catch (err) {
-      res.status(500).json({ success: false, message: 'Registration failed', error: err.message });
-    }
-};

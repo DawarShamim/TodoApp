@@ -28,14 +28,9 @@ const taskSchema = new mongoose.Schema({
     enum: ['low', 'medium', 'high'],
     required: true
   },
-  
-  isCompleted: {
+  Status: {
     type: Boolean,
     default: false
-  },
-  userId: {
-    type: String,
-    required: true
   },
   createdAt: {
     type: Date,

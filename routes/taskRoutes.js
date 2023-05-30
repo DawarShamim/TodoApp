@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controller/userController');
-const{ Authentication,login } =require('../Auth');
+const{ UserRole,Authentication,login } =require('../Auth');
 
 // Route for registering an faculty user
-router.post('/new', Authentication,userController.registerUser);
+router.post('/new', userController.registerUser);
 
-router.post("/updatepassword/:userid", Authentication,userController.updateUserPassword);
+// Get all Users
+// router.get("/all",userController.getallUser);
+
+// Get a single User by Username
+// router.get("/find/:username", userController.getUserByusername);
+router.post("/hehe/:userid",userController.checker);
 // // Update a User by Username
 // router.put("/update/profile/:username", userController.updateUserByusername);
 

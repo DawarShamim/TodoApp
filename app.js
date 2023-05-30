@@ -17,7 +17,17 @@ app.use(cors());
 
 require("./middleware/passport")(passport);
 
-app.use('/User',require('./routes/userRoutes'))
+app.use('/api/User',require('./routes/userRoutes'));
+
+app.use('/api/Task',require('./routes/taskRoutes'));
+
+// This will fire whenever an unknown endpoint is hit
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts("json")) {
+    res.send({ error: "404 Not Found" });
+  }
+});
 
 startApp = async () => {
     try {

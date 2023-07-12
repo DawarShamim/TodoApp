@@ -33,19 +33,23 @@ app.all("*", (req, res) => {
 
 startApp = async () => {
     try {
+      const MongoConnect= async () =>{ 
       mongoose.set("strictQuery", false);
       await mongoose.connect(DBurl);
-  
       success({
         message: "Connected to the database successfully",
         badge: true,
-      });
-  
-      app.listen(3000, () => {
+      });}
+
+      MongoConnect().then(() => {
+        app.listen(3000, () => {
         success({
           message: "Server Started ",
         });
       });
+    }); 
+    
+    
     } catch (err) {
       error({
         message: `Unable to connect with database: ${err.message}`,

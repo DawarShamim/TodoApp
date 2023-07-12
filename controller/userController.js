@@ -2,37 +2,53 @@ const User= require("../models/User");
 const bcrypt =require('bcryptjs');
 
 exports.registerUser = async (req, res) => {
-    try {
-      const { email, username, password, firstName, lastName, dateOfBirth } = req.body;
-  
-      // Check if the email or username already exists in the database
-      const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-      if (existingUser) {
-        return res.status(400).json({ success: false, message: 'Email or username already exists' });
-      }
-  
-      // Hash the password
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-  
-      // Create a new user
-      const newUser = new User({
-        email,
-        username,
-        password: hashedPassword,
-        firstName,
-        lastName,
-        dateOfBirth,
-      });
-  
-      // Save the user to the database
-      await newUser.save();
-  
-      res.status(201).json({ success: true, message: 'User registered successfully' });
-    } catch (err) {
-      res.status(500).json({ success: false, message: 'Registration failed', error: err.message });
+  try {
+    const email = req.body?.email;
+    const username= req.body?.username;
+    const password = req.body?.password;
+    const firstName = req.body?.firstName;
+    const lastName = req.body?.lastName;
+    const dateOfBirth = req.body?.dateOfBirth;
+    
+    // Check if the email or username already exists in the database
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Email or username already exists' });
     }
-  };
+
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create a new user
+    const newUser = new User({
+      email,
+      username,
+      password: hashedPassword,
+      firstName,
+      lastName,
+      dateOfBirth,
+    });
+
+    // Save the user to the database
+    await newUser.save();
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      {
+        user_id: newUser._id,
+        username: newUser.username,
+      },
+      'Route-Token'
+    );
+
+    // User registered and logged in successfully
+    res.status(201).json({ success: true, message: 'User registered and logged in successfully', token });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Registration failed', error: err.message });
+  }
+};
+
   
 
 

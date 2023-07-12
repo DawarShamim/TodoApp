@@ -1,25 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controller/userController');
-const{ UserRole,Authentication,login } =require('../Auth');
+const taskController = require('../controller/taskController');
+const{Authentication} =require('../Auth');
 
 // Route for registering an faculty user
-router.post('/new', userController.registerUser);
+router.post('/new', Authentication,taskController.ChangeStatus);
 
 // Get all Users
-// router.get("/all",userController.getallUser);
+router.get("/all",Authentication,taskController.viewTasks);
 
 // Get a single User by Username
-// router.get("/find/:username", userController.getUserByusername);
-router.post("/hehe/:userid",userController.checker);
+// router.get("/find/:username", taskController.getUserByusername);
+router.post("/hehe/:userid",Authentication,userController.checker);
 // // Update a User by Username
-// router.put("/update/profile/:username", userController.updateUserByusername);
+// router.put("/update/profile/:username", taskController.updateUserByusername);
 
 // // Update User password by Username
-// router.put("/update/password/:username", userController.updateUserPassword);
+// router.put("/update/password/:username", taskController.updateUserPassword);
 
 // // Delete a User by Username
-// router.delete("/delete/:username", userController.deleteUserByusername);
+// router.delete("/delete/:username", taskController.deleteUserByusername);
 
 
 module.exports = router;

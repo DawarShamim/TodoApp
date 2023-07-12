@@ -27,11 +27,11 @@ exports.ChangeStatus = async (req, res) => {
   }
 };
 
-exports.updateTask = async (req, res) => {
-    try {
-      const taskId = req.params.taskId; // Assuming taskId is passed in the request URL
-      const { title, description, dueDate, priority } = req.body;
-  
+exports.updateTask = async (req, res) => {try {const taskId = req.params.taskId;
+    const title= req.body?.title;
+    const description = req.body?.description;
+    const dueDate = req.body?.dueDate;
+    const priority = req.body?.priority;
       // Find the task by its ID
       const task = await Task.findById(taskId);
   
@@ -40,19 +40,18 @@ exports.updateTask = async (req, res) => {
       }
   
       // Update the task fields if provided in the request body
-      if (title) {
+      if (title!= undefined) {
         task.title = title;
       }
-      if (description) {
+      if (description!= undefined) {
         task.description = description;
       }
-      if (dueDate) {
+      if (dueDate!= undefined) {
         task.dueDate = dueDate;
       }
-      if (priority) {
+      if (priority!= undefined) {
         task.priority = priority;
       }
-  
       // Save the updated task to the database
       await task.save();
   
@@ -96,9 +95,7 @@ exports.createTask = async (req, res) => {
 };
 
 
-exports.deleteTask = async (req, res) => {
-  try {
-    const taskId = req.params.taskId;
+exports.deleteTask = async (req, res) => {try {const taskId = req.params.taskId;
     
     // Remove the task from the database
     await Task.deleteOne({ _id: taskId });
@@ -116,9 +113,7 @@ exports.deleteTask = async (req, res) => {
 };
 
 
-exports.viewTasks = async (req, res) => {
-  try {
-    const userId = req.params.userId;
+exports.viewTasks = async (req, res) => {try{const userId = req.params.userId;
 
     // Find the user by ID
     const currentUser = await User.findById(userId);

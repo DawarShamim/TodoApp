@@ -21,6 +21,8 @@ app.use('/api/User',require('./routes/userRoutes'));
 
 app.use('/api/Task',require('./routes/taskRoutes'));
 
+app.use('/api/Login',require(login));
+
 // This will fire whenever an unknown endpoint is hit
 app.all("*", (req, res) => {
   res.status(404);

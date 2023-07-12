@@ -21,7 +21,7 @@ app.use('/api/User',require('./routes/userRoutes'));
 
 app.use('/api/Task',require('./routes/taskRoutes'));
 
-app.use('/api/Login',require(login));
+app.use('/api/Login',login);
 
 // This will fire whenever an unknown endpoint is hit
 app.all("*", (req, res) => {
@@ -43,7 +43,7 @@ startApp = async () => {
   
       app.listen(3000, () => {
         success({
-          message: "Server is started at PORT: 3000",
+          message: "Server is started ",
         });
       });
     } catch (err) {

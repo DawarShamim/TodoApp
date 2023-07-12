@@ -11,7 +11,6 @@ router.get("/all",Authentication,taskController.viewTasks);
 
 // Get a single User by Username
 // router.get("/find/:username", taskController.getUserByusername);
-router.post("/hehe/:userid",Authentication,userController.checker);
 // // Update a User by Username
 // router.put("/update/profile/:username", taskController.updateUserByusername);
 

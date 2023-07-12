@@ -1,20 +1,28 @@
 const User= require("../models/User");
 const bcrypt =require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 exports.registerUser = async (req, res) => {
   try {
-    const email = req.body?.email;
-    const username= req.body?.username;
-    const password = req.body?.password;
-    const firstName = req.body?.firstName;
-    const lastName = req.body?.lastName;
-    const dateOfBirth = req.body?.dateOfBirth;
-    
+    const email = req.body?.Email;
+    const username= req.body?.Username;
+    const password = req.body?.Password;
+    const firstName = req.body?.FirstName;
+    const lastName = req.body?.LastName;
+    const dateOfBirth = req.body?.DateOfBirth;
+
+
     // Check if the email or username already exists in the database
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'Email or username already exists' });
     }
+
+    // Check password length before hashing
+    if (password.length < 8 || password.length > 20) {
+      return res.status(400).json({ success: false, message: 'Password must be between 8 and 20 characters long' });
+    }
+
 
     // Hash the password
     const saltRounds = 10;

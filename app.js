@@ -43,7 +43,7 @@ startApp = async () => {
   
       app.listen(3000, () => {
         success({
-          message: "Server is started ",
+          message: "Server Started ",
         });
       });
     } catch (err) {

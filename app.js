@@ -11,6 +11,7 @@ const passport = require("passport");
 
 const{ UserRole,Authentication,login } =require('./Auth');
 
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json()); 
 app.use(cors());
@@ -38,8 +39,8 @@ startApp = async () => {
       
         console.log("Connected to the database successfully");
       
-        app.listen(3000, () => {
-          console.log("Server started");
+        app.listen(PORT, () => {
+          console.log("Server started",PORT);
         });
             
     

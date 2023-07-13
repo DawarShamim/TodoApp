@@ -32,22 +32,16 @@ app.all("*", (req, res) => {
 });
 
 startApp = async () => {
-    try {
-      const MongoConnect= async () =>{ 
-      mongoose.set("strictQuery", false);
-      await mongoose.connect(DBurl);
-      success({
-        message: "Connected to the database successfully",
-        badge: true,
-      });}
-
-      MongoConnect().then(() => {
+      try {
+        mongoose.set("strictQuery", false);
+        await mongoose.connect(DBurl);
+      
+        console.log("Connected to the database successfully");
+      
         app.listen(3000, () => {
-        success({
-          message: "Server Started ",
+          console.log("Server started");
         });
-      });
-    }); 
+            
     
     
     } catch (err) {

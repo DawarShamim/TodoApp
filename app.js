@@ -9,9 +9,9 @@ const DBurl=process.env.DBurl;
 const app = express();
 const passport = require("passport");
 
-const{ UserRole,Authentication,login } =require('./Auth');
+const{ login } =require('./Auth');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json()); 
 app.use(cors());

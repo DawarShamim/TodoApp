@@ -57,13 +57,9 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-  
-
-
 exports.updateUserPassword = async (req, res) => {
     try {
       const _id  = req.params._id;
-      console.log(req.user);
       const oldPassword = req.body?.oldPassword;
       const newPassword = req.body?.newPassword;
       const updateUser = await User.findById(_id);
@@ -89,4 +85,17 @@ exports.updateUserPassword = async (req, res) => {
       }
     };
 
-
+    exports.GetUserProfile = async (req, res) => {
+      try {
+        const user = await User.findById(req.params.user_id).select('-password -todoList -__v -_id');
+    
+        if (!user) {
+          return res.status(404).json({ success: false, message: "User not found" });
+        }
+    
+        res.status(200).json({ success: true, message: "Profile retrieved successfully", user });
+      } catch (err) {
+        res.status(500).json({ success: false, message: "Failed to find profile", error: err.message });
+      }
+    };
+    

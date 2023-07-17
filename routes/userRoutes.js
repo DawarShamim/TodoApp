@@ -5,8 +5,9 @@ const{ Authentication,login } =require('../Auth');
 
 router.post('/new',userController.registerUser);
 
-router.post("/updatepassword/:userid", Authentication,userController.updateUserPassword);
+router.post("/updatePassword/:userid", Authentication,userController.updateUserPassword);
 
+router.post('/userProfile/:user_id',userController.GetUserProfile);
 
 
 module.exports = router;

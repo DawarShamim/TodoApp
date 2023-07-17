@@ -27,7 +27,8 @@ exports.ChangeStatus = async (req, res) => {
   }
 };
 
-exports.updateTask = async (req, res) => {try {const taskId = req.params.taskId;
+exports.updateTask = async (req, res) => {
+  try {const taskId = req.params.taskId;
     const title= req.body?.title;
     const description = req.body?.description;
     const dueDate = req.body?.dueDate;

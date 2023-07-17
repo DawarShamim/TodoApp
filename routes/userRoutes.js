@@ -7,7 +7,7 @@ router.post('/new',userController.registerUser);
 
 router.post("/updatePassword/:userid", Authentication,userController.updateUserPassword);
 
-router.post('/userProfile/:user_id',userController.GetUserProfile);
+router.get('/userProfile/:user_id',userController.GetUserProfile);
 
 
 module.exports = router;

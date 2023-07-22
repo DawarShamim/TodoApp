@@ -4,7 +4,7 @@ const User = require('../models/User');
 // Mark a task as complete
 exports.ChangeStatus = async (req, res) => {
   try {
-    const taskId = req.params;
+    const taskId = req.params.task_id;
     const newStatus = req.body?.newstatus;
     if (newStatus !== true && newStatus !== false) {
         // validation error
@@ -22,17 +22,18 @@ exports.ChangeStatus = async (req, res) => {
     res.status(200).json({ success: true, message: 'update successful',savedTask});
 
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'An error occurred while marking the task as complete' });
   }
 };
 
 exports.updateTask = async (req, res) => {
-  try {const taskId = req.params.taskId;
+  try {
+    const taskId = req.params.task_id;
     const title= req.body?.title;
     const description = req.body?.description;
     const dueDate = req.body?.dueDate;
     const priority = req.body?.priority;
+
       // Find the task by its ID
       const task = await Task.findById(taskId);
   
@@ -58,7 +59,6 @@ exports.updateTask = async (req, res) => {
   
       res.json({ message: 'Task updated successfully', task });
     } catch (err) {
-      console.error(err);
       res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -70,8 +70,7 @@ exports.createTask = async (req, res) => {
     const description = req.body?.description;
     const dueDate = req.body?.dueDate;
     const priority = req.body?.priority;
-    const userId = req.body?.userId;
-
+    const userId = req.user;
     // Create a new task object
     const task = new Task({
       title,
@@ -82,39 +81,43 @@ exports.createTask = async (req, res) => {
 
     // Save the task to the database
     await task.save();
-
     // Add the task's ObjectId to the user's TodoList
     await User.findByIdAndUpdate(userId, {
-      $push: { TodoList: task._id }
+      $push: { todoList: task._id }
     });
 
     res.status(201).json({success:true, message: 'Task created successfully', task });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success:false, message: 'Internal server error' });
   }
 };
 
 
-exports.deleteTask = async (req, res) => {try {const taskId = req.params.taskId;
+exports.deleteTask = async (req, res) => {
+  try {
+    const taskId = req.params.task_id;
+    const userId = req.user;
+    
     
     // Remove the task from the database
     await Task.deleteOne({ _id: taskId });
 
     // Remove the task's ObjectId from the user's TodoList
     await User.findByIdAndUpdate(userId, {
-      $pull: { TodoList: taskId }
+      $pull: { todoList: taskId }
     });
 
     res.status(200).json({ success: true, message: 'Task deleted successfully' });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
 
-exports.viewTasks = async (req, res) => {try{const userId = req.params.userId;
+exports.viewTasks = async (req, res) => {
+  try
+  {
+  const userId = req.user;
 
     // Find the user by ID
     const currentUser = await User.findById(userId);
@@ -127,7 +130,6 @@ exports.viewTasks = async (req, res) => {try{const userId = req.params.userId;
 
     res.status(200).json({ success: true, message: 'Tasks retrieved successfully', tasks });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success: false, message: 'Internal server error', error: err });
   }
 };

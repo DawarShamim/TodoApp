@@ -43,7 +43,29 @@ const login = async (req, res) => {
 
 const Authentication = passport.authenticate("jwt", { session: false });
 
+function AuthenticateUser(req, res, next) {
+  // Assuming you have a JWT token passed in the request header
+  const header = req.headers.authorization;
+  const token = header.replace("Bearer ", "");
+  if (!token) {
+    return res.status(400).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    // Verify the token and extract user information
+    const Validity = jwt.verify(token, "Route-Token");
+if(Validity){
+   const decodedToken = jwt.decode(token);
+    req.user = decodedToken.user_id;// Assuming the user information is stored in 'user' property of the token
+    next();}
+  } catch (err) {
+    return res.status(401).json({ message: 'okie token' });
+  }
+}
+
+
     module.exports = {
         Authentication,
         login,
+        AuthenticateUser
       };

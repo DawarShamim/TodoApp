@@ -56,10 +56,40 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ success: false, message: 'Registration failed', error: err.message });
   }
 };
+exports.UpdateProfile= async (req, res) => {
+  try {
+    const userId = req.user; // Assuming you have the userId available from the authentication middleware
+
+    // Get the updated profile data from the request body
+    const firstName = req.body?.firstName;
+    const lastName = req.body?.lastName;
+    const dateOfBirth = req.body?.dateOfBirth;
+
+    // Find the user in the database and update their profile
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstName,
+        lastName,
+        dateOfBirth,
+      },
+      { new: true } // Return the updated user data
+    );
+    // Check if the user exists and if the update was successful
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    // Return the updated user data
+    res.status(200).json({ success: true, message: 'Profile updated successfully', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to update profile', error: err.message });
+  }
+};
+
 
 exports.updateUserPassword = async (req, res) => {
     try {
-      const _id  = req.params._id;
+      const _id  = req.user;
       const oldPassword = req.body?.oldPassword;
       const newPassword = req.body?.newPassword;
       const updateUser = await User.findById(_id);
@@ -85,9 +115,9 @@ exports.updateUserPassword = async (req, res) => {
       }
     };
 
-    exports.GetUserProfile = async (req, res) => {
+exports.GetUserProfile = async (req, res) => {
       try {
-        const user = await User.findById(req.params.user_id).select('-password -todoList -__v -_id');
+        const user = await User.findById(req.user).select('-password -todoList -__v -_id');
     
         if (!user) {
           return res.status(404).json({ success: false, message: "User not found" });

@@ -21,16 +21,6 @@ router.delete('/delete/:task_id', Authentication,AuthenticateUser,taskController
 
 
 
-// Get a single User by Username
-// router.get("/find/:username", taskController.getUserByusername);
-// // Update a User by Username
-// router.put("/update/profile/:username", taskController.updateUserByusername);
-
-// // Update User password by Username
-// router.put("/update/password/:username", taskController.updateUserPassword);
-
-// // Delete a User by Username
-// router.delete("/delete/:username", taskController.deleteUserByusername);
 
 
 module.exports = router;

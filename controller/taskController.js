@@ -5,26 +5,27 @@ const User = require('../models/User');
 exports.ChangeStatus = async (req, res) => {
   try {
     const taskId = req.params.task_id;
+    console.log(taskId);
     const newStatus = req.body?.newstatus;
     if (newStatus !== true && newStatus !== false) {
         // validation error
         return res.status(400).json({ error: 'Invalid value for newStatus' });
       }
-    // Find the task by its ID
-    const task = await Task.findById(taskId);
-    if (task.Status == newStatus){
-        return res.status(400).json({ error: 'Already Updated' });
+      const updatedTask = await Task.findOneAndUpdate(
+        { _id: taskId },
+        { Status: newStatus },
+        { new: true } // This option returns the updated document
+      );
+  
+      if (!updatedTask) {
+        return res.status(404).json({ error: 'Task not found' });
+      }
+  
+      res.status(200).json({ success: true, message: 'Update successful', task: updatedTask });
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while updating the status of the task' });
     }
-    // Update the isCompleted property of the task to true
-    task.Status = newStatus;
-    const savedTask = await task.save();
-
-    res.status(200).json({ success: true, message: 'update successful',savedTask});
-
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while marking the task as complete' });
-  }
-};
+  };
 
 exports.updateTask = async (req, res) => {
   try {

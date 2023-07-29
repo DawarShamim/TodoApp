@@ -10,7 +10,6 @@ const taskSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    minLength: 10,
     maxLength: 1000
   },
   dueDate: {
@@ -25,7 +24,7 @@ const taskSchema = new mongoose.Schema({
   },
   priority: {
     type: String,
-    enum: ['low', 'medium', 'high'],
+    enum: ['Low', 'Medium', 'High'],
     required: true
   },
   Status: {

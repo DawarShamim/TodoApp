@@ -65,30 +65,34 @@ exports.updateTask = async (req, res) => {
 
 // Create a new task
 exports.createTask = async (req, res) => {
-  try {
-    const title= req.body?.title;
-    const description = req.body?.description;
-    const dueDate = req.body?.dueDate;
-    const priority = req.body?.priority;
+  try {    
+    const title= req.body?.Title;
+    const description = req.body?.Description;
+    const dueDate = req.body?.DueDate;
+    const priority = req.body?.Priority;
     const userId = req.user;
+
     // Create a new task object
     const task = new Task({
       title,
       description,
       dueDate,
-      priority
+      priority,
     });
+    
+        console.log(userId);
+        console.log(req.body);
 
     // Save the task to the database
     await task.save();
-    // Add the task's ObjectId to the user's TodoList
     await User.findByIdAndUpdate(userId, {
       $push: { todoList: task._id }
-    });
+    })
 
-    res.status(201).json({success:true, message: 'Task created successfully', task });
+    res.status(200).json({ success: true, message: 'Task created successfully', task });
   } catch (err) {
-    res.status(500).json({ success:false, message: 'Internal server error' });
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 

@@ -3,6 +3,8 @@ const mongoose =require("mongoose");
 const {success,error} = require("consola");
 const cors = require("cors");
 
+const bodyParser = require("body-parser");
+
 require('dotenv').config();
 const DBurl=process.env.DBurl;
 
@@ -11,10 +13,13 @@ const passport = require("passport");
 
 const{ login } =require('./Auth');
 
+
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json()); 
 app.use(cors());
+
+app.use(bodyParser.json());
 
 require("./middleware/passport")(passport);
 

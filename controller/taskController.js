@@ -5,7 +5,6 @@ const User = require('../models/User');
 exports.ChangeStatus = async (req, res) => {
   try {
     const taskId = req.params.task_id;
-    console.log(taskId);
     const newStatus = req.body?.newstatus;
     if (newStatus !== true && newStatus !== false) {
         // validation error
@@ -80,10 +79,6 @@ exports.createTask = async (req, res) => {
       dueDate,
       priority,
     });
-    
-        console.log(userId);
-        console.log(req.body);
-
     // Save the task to the database
     await task.save();
     await User.findByIdAndUpdate(userId, {

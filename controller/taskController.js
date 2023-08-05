@@ -29,18 +29,17 @@ exports.ChangeStatus = async (req, res) => {
 exports.updateTask = async (req, res) => {
   try {
     const taskId = req.params.task_id;
-    const title= req.body?.title;
-    const description = req.body?.description;
-    const dueDate = req.body?.dueDate;
-    const priority = req.body?.priority;
-
+    const title= req.body?.Title;
+    const description = req.body?.Description;
+    const dueDate = req.body?.DueDate;
+    const priority = req.body?.Priority;
+  
       // Find the task by its ID
       const task = await Task.findById(taskId);
   
       if (!task) {
         return res.status(404).json({ error: 'Task not found' });
       }
-  
       // Update the task fields if provided in the request body
       if (title!= undefined) {
         task.title = title;
@@ -59,7 +58,10 @@ exports.updateTask = async (req, res) => {
   
       res.json({ message: 'Task updated successfully', task });
     } catch (err) {
-      res.status(500).json({ error: 'Internal server error' });
+      if (err.message ==="Task validation failed: dueDate: Due date must be in the future"){
+        res.status(406).json({error:'Date must be in future' });
+      }else{
+      res.status(500).json({ error: 'Internal server error' });}
     }
   };
 
